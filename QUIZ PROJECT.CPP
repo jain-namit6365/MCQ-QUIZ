@@ -1,11 +1,30 @@
-#include<fstream.h>
+#include<fstream>
+#include<iostream>
 #include<conio.h>
 #include<process.h>
-#include<stdio.h>
+#include<cstdio>
 #include<string.h>
 #include<stdlib.h>
-const char*crpass="project";
-const char*pass="project";
+#include<ctime>
+#include "windows.h"
+
+void gotoxy(int x, int y)
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+#define LENGTH         128
+#define ENTER           13
+#define BACKSPACE        8
+
+using namespace std;
+
+const char *crpass="project";       //password for starting the program
+const char *pass="project";         //password for accessing the file records
+
 class Quiz
 { private : char name[50];
 	    int age;
@@ -35,7 +54,7 @@ class Quiz
   public : Quiz()
 	   { score=0;
 	     grade='-';
-	     strcpy(name,"Participant");
+	     strcpy(name, "NaN");
 	     age=0;
 	     sex='N';
 	     phone=0;
@@ -47,7 +66,8 @@ class Quiz
 	   }
 	   void getinfo()
 	   { cout<<"Enter name             : ";
-	     gets(name);
+         cin.ignore();
+	     cin.getline(name, 50);
 	     cout<<"Enter Age              : ";
 	     cin>>age;
 	     cout<<"Enter Sex (M/F)        : ";
@@ -57,8 +77,7 @@ class Quiz
 	   }
 	   void showinfo()
 	   { cout<<"Id       : "<<id<<endl;
-	     cout<<"Name     : ";
-	     puts(name);
+	     cout<<"Name     : "<<name<<endl;
 	     cout<<"Age      : "<<age<<endl;
 	     cout<<"Sex      : "<<sex<<endl;
 	     cout<<"Phone    : "<<phone;
@@ -738,11 +757,38 @@ Quiz storeinfo(Quiz q)           //storing result in the sorted file
 }
 Quiz showresult(Quiz q)                 //showing all results to the user
 {
-char*password=getpass("Enter Password : ");
+
+//char *password = getpass("Enter Password : ");
+//OR
+cout<<"Enter Password : ";
+char password[LENGTH];
+char ch;
+int pos=0;
+while(true)
+     {
+       ch=getch();
+       if(pos>=LENGTH) {cout<<'\a'; continue;} //beep if password is too long
+
+       if(ch==ENTER) break;  //User have pressed ENTER
+
+       else if(ch==BACKSPACE)  //BACKSPACE was pressed
+         {
+           cout <<"\b \b";
+           password[--pos]='\0';
+         }
+       else// A..Z a...z
+         {
+           cout <<"*";
+           password[pos++]=ch;
+           password[pos]='\0';
+         }
+       if(pos<=0) pos=0;
+     }
+
 if(strcmp(password,crpass)==0)
-{ clrscr();
-  fstream abc;
+{ fstream abc;
   int i=0,j=0;
+  system("cls");
   abc.open("Information.dat",ios::in|ios::binary);
   if(!abc)
   { cout<<"File not Present";
@@ -763,7 +809,7 @@ if(strcmp(password,crpass)==0)
     { cout<<"Press any key to view more ";
       getch();
       i=0;
-      clrscr();
+      system("cls");
     }
   }
   if(j==0)
@@ -777,9 +823,36 @@ else
 }
 Quiz getinfo(Quiz q)                 //searching and displaying info of specific participant
 {
-char*password=getpass("Enter Password : ");
+//char *password=getpass("Enter Password : ");
+//OR
+cout<<"Enter Password : ";
+char password[LENGTH];
+char ch;
+int pos=0;
+while(true)
+     {
+       ch=getch();
+       if(pos>=LENGTH) {cout<<'\a'; continue;} // beep if password is too long
+
+       if(ch==ENTER) break;  // User have pressed ENTER
+
+       else if(ch==BACKSPACE)  // BACKSPACE was pressed
+         {
+           cout <<"\b \b";
+           password[--pos]='\0';
+         }
+       else // A..Z a...z
+         {
+           cout <<"*";
+           password[pos++]=ch;
+           password[pos]='\0';
+         }
+       if(pos<=0) pos=0;
+     }
+
 if(strcmp(password,crpass)==0)
-{ clrscr();
+{
+  system("cls");
   fstream abc;
   abc.open("Information.dat",ios::in|ios::binary);
   if(!abc)
@@ -813,9 +886,36 @@ else
 }
 Quiz deleteinfo(Quiz q)          //deleting info of specific participant
 {
-char*password=getpass("Enter Password : ");
+//char*password=getpass("Enter Password : ");
+//OR
+cout<<"Enter Password : ";
+char password[LENGTH];
+char ch;
+int pos=0;
+while(true)
+     {
+       ch=getch();
+       if(pos>=LENGTH) {cout<<'\a'; continue;} // beep if password is too long
+
+       if(ch==ENTER) break;  // User have pressed ENTER
+
+       else if(ch==BACKSPACE)  // BACKSPACE was pressed
+         {
+           cout <<"\b \b";
+           password[--pos]='\0';
+         }
+       else// A..Z a...z
+         {
+           cout <<"*";
+           password[pos++]=ch;
+           password[pos]='\0';
+         }
+       if(pos<=0) pos=0;
+     }
+
 if(strcmp(password,crpass)==0)
-{ clrscr();
+{
+  system("cls");
   fstream abc,def;
   abc.open("Information.dat",ios::in|ios::binary);
   def.open("Temp.dat",ios::app|ios::binary);
@@ -889,13 +989,41 @@ Quiz getid(Quiz q)
   cout<<"Your id is "<<Id;
   return q;
 }
-void main()
-{ clrscr();
-randomize();
+int main()
+{
+  system("cls");
+  srand(time(0));
 gotoxy(32,1);cout<<"PROGRAM OF QUIZ \n\n";
-char*password=getpass("Enter Password : ");
+//char*password=getpass("Enter Password : ");
+//OR
+cout<<"Enter Password : ";
+char password[LENGTH];
+char ch;
+int pos=0;
+while(true)
+     {
+       ch=getch();
+       if(pos>=LENGTH) {cout<<'\a'; continue;} // beep if password is too long
+
+       if(ch==ENTER) break;  // User have pressed ENTER
+
+       else if(ch==BACKSPACE)  // BACKSPACE was pressed
+         {
+           cout <<"\b \b";
+           password[--pos]='\0';
+         }
+       else// A..Z a...z
+         {
+           cout <<"*";
+           password[pos++]=ch;
+           password[pos]='\0';
+         }
+       if(pos<=0) pos=0;
+     }
+
 if(strcmp(password,pass)==0)
-{ clrscr();
+{
+  system("cls");
   char c;
 do{
   Quiz q;
@@ -905,7 +1033,8 @@ do{
   abc.close();
   for(i=0;i<10;i++)
   { k[i]=0; }
-  gotoxy(32,4);cout<<"CHOICES\n\n ";
+  gotoxy(32,4);
+  cout<<"CHOICES\n\n ";
   cout<<"\n1. Play the Quiz";
   cout<<"\n2. Display the information of all Participants";
   cout<<"\n3. Display the information of a specific participant with the help of his/ ";
@@ -914,7 +1043,7 @@ do{
   cout<<"\n5. Close the Program";
   cout<<"\n\nEnter choice : ";            //taking choice from the user
   cin>>ch;
-  clrscr();
+  system("cls");
   switch(ch)
   { case 1: cout<<"******************************************************************************";
 	    cout<<"\n******************************************************************************";
@@ -936,10 +1065,11 @@ do{
 	    cout<<"\n@ Leave the question unattempted by answering with 'x' (or 'X').";
 	    cout<<"\n\nPress any key to continue";
 	    getch();
-	    clrscr();
-	     gotoxy(32,1);cout<<"Qualification Question\n";
+	    system("cls");
+        gotoxy(32,1);
+        cout<<"Qualification Question\n";
 	    cout<<"Your qualification question is :-\n\n";
-	    a=random(5);
+	    a = rand() % 5;
 	    switch(a)                              //calling functions randomly
 	    { case 0: q.q1(); break;
 	      case 1: q.q2(); break;
@@ -949,20 +1079,21 @@ do{
 	    }
 	    cout<<"\n\nPress any key to continue";
 	    getch();
-	    clrscr();
-	     gotoxy(37,1);cout<<"DETAILS\n";
+	    system("cls");
+        gotoxy(37,1);
+        cout<<"DETAILS\n";
 	    cout<<"Enter your information : \n";
 	    q.getinfo();
 	    q=getid(q);
 	    cout<<"\n\nPress any key to continue";
 	    getch();
-	    clrscr();
+	    system("cls");
 	    for(i=0;i<10;i++)               //loop to display 10 questions
 	    { abc:                          //conditions so that no 2 questions gets repeated
-	      a=random(20)+1;
+	      a=rand() % 20 +1;
 	      for(j=0;j<10;j++)
 	      { if(a==k[j])
-		goto abc;
+                goto abc;
 	      }
 	      k[i]=a;
 	      switch(a)                     //calling functions randomly
@@ -989,7 +1120,7 @@ do{
 	      }
 	      cout<<"\n\nPress any key to continue";
 	      getch();
-	      clrscr();
+	      system("cls");
 	    }
 	    storeinfo(q);
 	    parresult(q);
@@ -1001,12 +1132,13 @@ do{
 	    break;
     case 4: deleteinfo(q);
 	    break;
-    case 5: exit(0);break;
+    case 5: exit(0);
+        break;
     default: cout<<"!!!!! WRONG CHOICE !!!!!";
   }
   cout<<"\n\nPress any key to continue";
   getch();
-  clrscr();
+  system("cls");
   cout<<"\nDo you want to do more operations (Y/N) : ";   //asking user to continue using the program
   cin>>c;
   cout<<endl;
@@ -1014,8 +1146,6 @@ do{
 }
 else
   cout<<"\n\nIncorrect Password";
-cout<<"\n\nProject made by : ";
-cout<<"\nNamit Jain          XII-B";
-cout<<"\nStudent of Maharaja Agarsain Public School";
+cout<<"\n\nProject made by Namit Jain";
 getch();
 }
